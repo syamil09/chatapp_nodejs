@@ -31,6 +31,8 @@
 				<div class="card" id="chat"></div>
 				<form action="" id="messageForm">
 					<div class="form-group">
+						<label for="">Username</label>
+						<input type="text" id="username" class="form-control">
 						<label for="">Enter Message</label>
 						<textarea class="form-control" id="message" cols="30" rows="10"></textarea>
 						<br>
@@ -46,16 +48,21 @@
 		var chat = $('#chat');
 		var msgForm = $('#messageForm');
 		var msg = $('#message');
+		var username = $('#username');
 
 		msgForm.submit(function(e) {
 			e.preventDefault();
-			socket.emit('send message', msg.val());
+			socket.emit('send message', {
+					msg: msg.val(),
+					username: username.val()
+				});
 			msg.val('');
+			username.val('');
 		});
 
 		// get message
 		socket.on('new message', function(data) {
-			chat.append(`<div class="list-group-item">${data.msg}</div>`);
+			chat.append(`<div class="list-group-item"><b>${data.username} : </b>${data.msg}</div>`);
 		})
 	});
 </script>

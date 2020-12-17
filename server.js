@@ -26,6 +26,9 @@ io.sockets.on('connection', function(socket) {
 	// Send Message from client
 	socket.on('send message', function(data) {
 		// broadcast message again
-		io.sockets.emit('new message', {msg: data});
+		io.sockets.emit('new message', {
+			msg: data.msg, 
+			username: data.username
+		});
 	});
 });
