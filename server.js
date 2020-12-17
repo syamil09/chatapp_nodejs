@@ -25,10 +25,18 @@ io.sockets.on('connection', function(socket) {
 
 	// Send Message from client
 	socket.on('send message', function(data) {
-		// broadcast message again
-		io.sockets.emit('new message', {
+		// join to particular room
+		socket.join(data.room);
+		io.sockets.to(data.room).emit('new message', {
+			room: data.room,
 			msg: data.msg, 
 			username: data.username
 		});
+		// broadcast message again
+		// io.sockets.emit('new message', {
+		// 	room: data.room
+		// 	msg: data.msg, 
+		// 	username: data.username
+		// });
 	});
 });

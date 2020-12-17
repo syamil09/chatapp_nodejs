@@ -22,15 +22,21 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-4">
-				<div class="card card-body bg-primary">
+				<div class="card card-body bg-primary mb-3">
 					<h3 class="text-white">Online users</h3>
 					<ul class="list-group" id="users"></ul>
+				</div>
+				<div class="card card-body bg-secondary mb-3">
+					<h3 class="text-white">Room : <span id="roomName"></span></h3>
+					
 				</div>
 			</div>
 			<div class="col-md-8">
 				<div class="card" id="chat"></div>
 				<form action="" id="messageForm">
 					<div class="form-group">
+						<label for="">Room</label>
+						<input type="text" id="room" class="form-control">
 						<label for="">Username</label>
 						<input type="text" id="username" class="form-control">
 						<label for="">Enter Message</label>
@@ -49,19 +55,23 @@
 		var msgForm = $('#messageForm');
 		var msg = $('#message');
 		var username = $('#username');
+		var room = $('#room');
 
 		msgForm.submit(function(e) {
 			e.preventDefault();
 			socket.emit('send message', {
+					room: room.val(),
 					msg: msg.val(),
-					username: username.val()
+					username: username.val(),
 				});
 			msg.val('');
 			username.val('');
+			room.val('');
 		});
 
 		// get message
 		socket.on('new message', function(data) {
+			$('#roomName').text(data.room);
 			chat.append(`<div class="list-group-item"><b>${data.username} : </b>${data.msg}</div>`);
 		})
 	});
